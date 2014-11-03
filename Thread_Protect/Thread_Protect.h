@@ -6,35 +6,31 @@
 #include <list>
 #include <string>
 
-
-typedef void(*createth)();
+typedef void(*PFUNCTION)();
 struct ThreadMap {
-	ThreadMap() : id(0), name("dd") {}
-	ThreadMap(HANDLE newthreadhw, DWORD newthreadid, createth newcreateths, int newId, std::string newName)
-		: threadhw(newthreadhw), threadid(newthreadid), createths(newcreateths), id(newId), name(newName) {}
+	//ThreadMap() : id(0), name("dd") {}
+	ThreadMap() {}
+	ThreadMap(int newThreadNUMBER, HANDLE newThreadHANDLE, DWORD newThreadTID, PFUNCTION newThreadFUNCTION, std::string newThreadNAME)
+	: ThreadNUMBER(newThreadNUMBER), ThreadHANDLE(newThreadHANDLE), ThreadTID(newThreadTID), ThreadFUNCTION(newThreadFUNCTION), ThreadNAME(newThreadNAME) {}
 
-	HANDLE threadhw;
-	DWORD threadid;
-	//LPVOID createth;
-	int id;
-	std::string name;
-	createth createths;
-
+	int ThreadNUMBER;
+	HANDLE ThreadHANDLE;
+	DWORD ThreadTID;	
+	PFUNCTION ThreadFUNCTION;
+	std::string ThreadNAME;
 };
 
 class Thread_Protect : public CppSingleton <Thread_Protect>
 {
 public:
-	std::map<int, ThreadMap> ThreadMaps;
 	Thread_Protect();
 	virtual ~Thread_Protect();
-
-
 	int InsertThread(ThreadMap* tm, std::list<std::string>* li);
 	void MapStart();
-	void MapStop();
+	void MapStop();	
 private:
-	int Threadcnt;
 	static void MapRun(std::map<int, ThreadMap>* TM);
-
+	std::map<int, ThreadMap> ThreadMaps;
+	HANDLE MainhThread;
+	int Threadcnt;
 };
